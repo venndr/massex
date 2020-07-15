@@ -1,6 +1,14 @@
 # Massex
 
-**TODO: Add description**
+Massex is a simple pattern for holding masses and interacting with them in a sensible manner.
+It follows the whole value pattern, and allows easy storage, retrieval and mathematics upon
+values of mass in disparate scales.
+
+```elixir
+iex> one = Massex.new(10, :gram)
+...> two = Massex.new(10, :ounce)
+...> Massex.add(one, two)
+```
 
 ## Installation
 
