@@ -1,5 +1,9 @@
 if Code.ensure_loaded?(Absinthe) do
   defmodule Massex.Absinthe.Type do
+    @moduledoc """
+    Ready-baked utility types to integrate Massex with your Absinthe schema
+    """
+
     use Absinthe.Schema.Notation
 
     @desc """
