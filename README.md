@@ -12,6 +12,8 @@ iex> one = Massex.new(10, :gram)
 ...> Massex.add(one, two)
 ```
 
+All the documentation is on [HexDocs](http://hexdocs.pm/massex)
+
 ## Supporting Libraries
 
 Massex ships with Jason support which will automatically be loaded if
