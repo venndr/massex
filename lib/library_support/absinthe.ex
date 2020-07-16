@@ -2,6 +2,28 @@ if Code.ensure_loaded?(Absinthe) do
   defmodule Massex.Absinthe.Type do
     @moduledoc """
     Ready-baked utility types to integrate Massex with your Absinthe schema
+
+    ## Usage
+
+        object :lorry do
+          field :mass, :mass
+        end
+
+        payload field :set_lorry_mass do
+          input do
+            field :id, non_null(:id)
+            field :mass, non_null(:mass_input)
+          end
+        end
+
+        query {
+          lorry {
+            mass {
+              amount
+              unit
+            }
+          }
+        }
     """
 
     use Absinthe.Schema.Notation
