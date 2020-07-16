@@ -50,4 +50,54 @@ defmodule MassexTest do
     assert Massex.compare(less, more) == -1
     assert Massex.compare(more, less) == 1
   end
+
+  test "Massex.divide/2 divides a `Massex` by the provided denominator" do
+    mass = Massex.new(10, :gram)
+
+    assert Massex.divide(mass, 2) == Massex.new(5, :gram)
+  end
+
+  test "Massex.equals?/2 returns true if two masses represent the same amount" do
+    left = Massex.new("28.3495", :gram)
+    right = Massex.new(1, :ounce)
+
+    assert Massex.equals?(left, right)
+  end
+
+  test "Massex.multiply/2 multiplies a Massex by an amount" do
+    mass = Massex.new(10, :gram)
+
+    assert Massex.multiply(mass, 10) == Massex.new(100, :gram)
+  end
+
+  test "Massex.negative?/1 returns true if the value is negative" do
+    negative = Massex.new(-10, :gram)
+    positive = Massex.new(10, :gram)
+
+    assert Massex.negative?(negative)
+    refute Massex.negative?(positive)
+  end
+
+  test "Massex.positive?/1 returns true if the value is positive" do
+    negative = Massex.new(-10, :gram)
+    positive = Massex.new(10, :gram)
+
+    refute Massex.positive?(negative)
+    assert Massex.positive?(positive)
+  end
+
+  test "Massex.subtract/2 subtracts one `Massex` from another, or a simple value from a `Massex`" do
+    left = Massex.new(40, :gram)
+    right = Massex.new(1, :ounce)
+
+    assert Massex.subtract(left, right) == Massex.new("11.6505", :gram)
+    assert Massex.subtract(left, 10) == Massex.new(30, :gram)
+    assert Massex.subtract(left, "10") == Massex.new(30, :gram)
+  end
+
+  test "Massex.to_decimal/2 returns a Decimal representation of the Massex struct" do
+    mass = Massex.new(10, :gram)
+
+    assert Massex.to_decimal(mass) == mass.amount
+  end
 end
