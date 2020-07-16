@@ -5,6 +5,11 @@ if Code.ensure_loaded?(Absinthe) do
 
     ## Usage
 
+        defmodule MySchema do
+          # setup
+          import_types Massex.Absinthe.Type
+        end
+
         object :lorry do
           field :mass, :mass
         end
