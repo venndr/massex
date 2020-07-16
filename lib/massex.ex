@@ -1,12 +1,12 @@
 defmodule Massex do
   @moduledoc """
-  Documentation for `Massex`.
+  Defines a whole value pattern container for masses, and utility methods for
+  working with them to improve handling within your applications.
   """
 
-  @valid_units ~w[g gram oz ounce]a
   @gram_to_ounce_rate Decimal.from_float(28.3495)
+  @zero Decimal.new(0)
 
-  @derive Jason.Encoder
   @enforce_keys [:unit, :amount]
   defstruct [:unit, :amount]
 
@@ -16,19 +16,21 @@ defmodule Massex do
         }
 
   @doc """
-  Builds a Massex struct from an amount and unit
+  Builds a `Massex` struct from an amount and unit
 
   ## Examples
 
       iex> Massex.new(10, :gram)
       %Massex{amount: Decimal.new(10), unit: :gram}
   """
-  @spec new(number() | Decimal.t() | String.t(), atom()) ::
-          t() | {:error, :invalid_amount}
-  def new(amount, unit) when unit in @valid_units do
-    case cast_amount(amount) do
-      :error -> {:error, :invalid_amount}
-      val -> %__MODULE__{unit: standardize_unit(unit), amount: val}
+  @spec new(number() | Decimal.t() | String.t(), atom() | String.t()) ::
+          t() | :error
+  def new(amount, unit) do
+    with {:ok, standardized} <- standardize_unit(unit) do
+      case cast_amount(amount) do
+        :error -> :error
+        val -> %__MODULE__{unit: standardized, amount: val}
+      end
     end
   end
 
@@ -40,7 +42,7 @@ defmodule Massex do
     do: %__MODULE__{amount: Decimal.abs(amount), unit: unit}
 
   @doc """
-  Adds two Massex structs together, returning a Massex
+  Adds two `Massex` structs together, returning a Massex
 
   ## Examples
 
@@ -70,7 +72,7 @@ defmodule Massex do
   end
 
   @doc """
-  Compares two Massex structs, returning 0 on equality, 1 if left is greater than right, or -1 if left is less than right
+  Compares two `Massex` structs, returning 0 on equality, 1 if left is greater than right, or -1 if left is less than right
 
   ## Examples
 
@@ -213,9 +215,28 @@ defmodule Massex do
   @spec to_decimal(t()) :: Decimal.t()
   def to_decimal(%__MODULE__{amount: amount}), do: amount
 
-  defp standardize_unit(:g), do: :gram
-  defp standardize_unit(:oz), do: :ounce
-  defp standardize_unit(unit), do: unit
+  @doc """
+  Returns true if the amount of a `Massex` is zero
+
+  ## Examples
+
+      iex> Massex.zero?(Massex.new(-10, :gram))
+      false
+      iex> Massex.zero?(Massex.new(0, :gram))
+      true
+  """
+  @spec zero?(t()) :: boolean()
+  def zero?(%__MODULE__{amount: amount}), do: Decimal.eq?(amount, @zero)
+
+  defp standardize_unit(:g), do: {:ok, :gram}
+  defp standardize_unit(:oz), do: {:ok, :ounce}
+  defp standardize_unit(:gram), do: {:ok, :gram}
+  defp standardize_unit(:ounce), do: {:ok, :ounce}
+
+  defp standardize_unit(unit) when is_binary(unit),
+    do: unit |> String.to_existing_atom() |> standardize_unit()
+
+  defp standardize_unit(_), do: :error
 
   defp cast_amount(%Decimal{} = amount), do: amount
   defp cast_amount(amount) when is_float(amount), do: Decimal.from_float(amount)

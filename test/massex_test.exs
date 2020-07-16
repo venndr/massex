@@ -100,4 +100,12 @@ defmodule MassexTest do
 
     assert Massex.to_decimal(mass) == mass.amount
   end
+
+  test "Massex.zero?/1 returns true if the amount of the Massex is zero" do
+    zero = Massex.new(0, :gram)
+    not_zero = Massex.new("0.0001", :gram)
+
+    assert Massex.zero?(zero)
+    refute Massex.zero?(not_zero)
+  end
 end
