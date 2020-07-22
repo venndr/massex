@@ -46,7 +46,7 @@ if Code.ensure_loaded?(Absinthe) do
     A `Mass` represents an amount of mass, such as some grams, or ounces.
     """
     object :mass do
-      field(:amount, non_null(:number))
+      field(:amount, non_null(:string))
       field(:unit, non_null(:mass_unit_enum))
     end
 
@@ -55,7 +55,7 @@ if Code.ensure_loaded?(Absinthe) do
     as an argument or as part of a mutation
     """
     input_object :mass_input do
-      field(:amount, non_null(:number))
+      field(:amount, non_null(:string))
       field(:unit, non_null(:mass_unit_enum))
     end
   end
