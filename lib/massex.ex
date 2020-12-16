@@ -234,7 +234,7 @@ defmodule Massex do
   defp standardize_unit(:ounce), do: {:ok, :ounce}
 
   defp standardize_unit(unit) when is_binary(unit),
-    do: unit |> String.to_existing_atom() |> standardize_unit()
+    do: unit |> String.to_atom() |> standardize_unit()
 
   defp standardize_unit(_), do: :error
 
