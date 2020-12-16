@@ -76,7 +76,7 @@ if Code.ensure_loaded?(Ecto.Type) do
     @spec load(map()) :: {:ok, Massex.t()}
     def load(%{"amount" => amount, "unit" => unit})
         when is_integer(amount) or is_binary(amount) do
-      {:ok, Massex.new(amount, String.to_existing_atom(unit))}
+      {:ok, Massex.new(amount, String.to_atom(unit))}
     end
   end
 end
