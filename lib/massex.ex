@@ -86,8 +86,11 @@ defmodule Massex do
       1
   """
   @spec compare(t(), t()) :: integer()
-  def compare(%__MODULE__{amount: leftval, unit: unit}, %__MODULE__{amount: rightval, unit: unit}),
-    do: leftval |> Decimal.compare(rightval) |> Decimal.to_integer()
+  def compare(%__MODULE__{amount: leftval, unit: unit}, %__MODULE__{amount: rightval, unit: unit}) do
+    leftval
+    |> Decimal.cmp(rightval)
+    |> cmp_to_integer()
+  end
 
   def compare(%__MODULE__{amount: leftval, unit: leftunit}, %__MODULE__{
         amount: rightval,
@@ -96,8 +99,15 @@ defmodule Massex do
       do:
         with(
           newval <- convert_amount(rightval, rightunit, leftunit),
-          do: leftval |> Decimal.compare(newval) |> Decimal.to_integer()
+          do:
+            leftval
+            |> Decimal.cmp(newval)
+            |> cmp_to_integer()
         )
+
+  defp cmp_to_integer(:eq), do: 0
+  defp cmp_to_integer(:gt), do: 1
+  defp cmp_to_integer(:lt), do: -1
 
   @doc """
   Divides a `Massex` by the provided denominator
