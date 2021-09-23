@@ -253,7 +253,7 @@ defmodule Massex do
   defp cast_amount(amount) when is_number(amount), do: Decimal.new(amount)
 
   defp cast_amount(amount) when is_binary(amount),
-    do: with({:ok, val} <- Decimal.parse(amount), do: val)
+    do: with({val, _} <- Decimal.parse(amount), do: val)
 
   defp convert_amount(amount, :gram, :ounce), do: Decimal.div(amount, @gram_to_ounce_rate)
   defp convert_amount(amount, :ounce, :gram), do: Decimal.mult(amount, @gram_to_ounce_rate)

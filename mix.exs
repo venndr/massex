@@ -1,7 +1,7 @@
 defmodule Massex.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "1.0.0"
   @description "A whole-value pattern library for handling masses"
   @homepage_url "https://github.com/venndr/massex"
 
@@ -20,12 +20,12 @@ defmodule Massex.MixProject do
         ]
       end,
       package: %{
-        contributors: ["John Maxwell"],
+        contributors: ["John Maxwell", "Niklas Lindgren", "Bjørn Zeiler Hougaard"],
         licenses: ["MIT"],
         links: %{
           "GitHub" => @homepage_url
         },
-        maintainers: ["John Maxwell"]
+        maintainers: ["John Maxwell", "Niklas Lindgren", "Bjørn Zeiler Hougaard"]
       },
       homepage_url: @homepage_url,
       source_url: @homepage_url,
@@ -52,10 +52,10 @@ defmodule Massex.MixProject do
     [
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-      {:absinthe, "~> 1.4", optional: true},
+      {:absinthe, "~> 1.6", optional: true},
       {:ecto, "~> 3.0", optional: true},
-      {:jason, ">= 0.0.0", optional: true},
-      {:decimal, "~> 1.0"},
+      {:jason, "~> 1.2.2", optional: true},
+      {:decimal, "~> 2.0"},
       # Development Utils
       {:credo, "~> 1.1", only: [:dev, :test], runtime: false, optional: true},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false, optional: true},
