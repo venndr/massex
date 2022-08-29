@@ -4,7 +4,8 @@ defmodule Massex do
   working with them to improve handling within your applications.
   """
 
-  @gram_to_ounce_rate Decimal.from_float(28.3495)
+  @pound_to_gram_rate Decimal.from_float(453.592)
+  @ounce_to_gram_rate Decimal.from_float(28.3495)
   @zero Decimal.new(0)
 
   @enforce_keys [:unit, :amount]
@@ -88,7 +89,7 @@ defmodule Massex do
   @spec compare(t(), t()) :: integer()
   def compare(%__MODULE__{amount: leftval, unit: unit}, %__MODULE__{amount: rightval, unit: unit}) do
     leftval
-    |> Decimal.cmp(rightval)
+    |> Decimal.compare(rightval)
     |> cmp_to_integer()
   end
 
@@ -101,7 +102,7 @@ defmodule Massex do
           newval <- convert_amount(rightval, rightunit, leftunit),
           do:
             leftval
-            |> Decimal.cmp(newval)
+            |> Decimal.compare(newval)
             |> cmp_to_integer()
         )
 
@@ -240,8 +241,10 @@ defmodule Massex do
 
   defp standardize_unit(:g), do: {:ok, :gram}
   defp standardize_unit(:oz), do: {:ok, :ounce}
+  defp standardize_unit(:lb), do: {:ok, :pound}
   defp standardize_unit(:gram), do: {:ok, :gram}
   defp standardize_unit(:ounce), do: {:ok, :ounce}
+  defp standardize_unit(:pound), do: {:ok, :pound}
 
   defp standardize_unit(unit) when is_binary(unit),
     do: unit |> String.to_atom() |> standardize_unit()
@@ -255,6 +258,15 @@ defmodule Massex do
   defp cast_amount(amount) when is_binary(amount),
     do: with({val, _} <- Decimal.parse(amount), do: val)
 
-  defp convert_amount(amount, :gram, :ounce), do: Decimal.div(amount, @gram_to_ounce_rate)
-  defp convert_amount(amount, :ounce, :gram), do: Decimal.mult(amount, @gram_to_ounce_rate)
+  defp convert_amount(amount, :gram, :ounce), do: Decimal.div(amount, @ounce_to_gram_rate)
+  defp convert_amount(amount, :ounce, :gram), do: Decimal.mult(amount, @ounce_to_gram_rate)
+
+  defp convert_amount(amount, :gram, :pound), do: Decimal.div(amount, @pound_to_gram_rate)
+  defp convert_amount(amount, :pound, :gram), do: Decimal.mult(amount, @pound_to_gram_rate)
+
+  defp convert_amount(amount, :ounce, :pound),
+    do: amount |> convert_amount(:ounce, :gram) |> convert_amount(:gram, :pound)
+
+  defp convert_amount(amount, :pound, :ounce),
+    do: amount |> convert_amount(:pound, :gram) |> convert_amount(:gram, :ounce)
 end

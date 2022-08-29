@@ -40,6 +40,7 @@ if Code.ensure_loaded?(Absinthe) do
     enum :mass_unit_enum do
       value(:gram, description: "A gram")
       value(:ounce, description: "An ounce")
+      value(:pound, description: "A pound")
     end
 
     @desc """

@@ -62,6 +62,16 @@ defmodule MassexTest do
     right = Massex.new(1, :ounce)
 
     assert Massex.equals?(left, right)
+
+    left = Massex.new("453.592", :gram)
+    right = Massex.new(1, :pound)
+
+    assert Massex.equals?(left, right)
+
+    left = Massex.new("16", :ounce)
+    right = Massex.new(1, :pound)
+
+    assert Massex.equals?(left, right)
   end
 
   test "Massex.multiply/2 multiplies a Massex by an amount" do
@@ -93,6 +103,13 @@ defmodule MassexTest do
     assert Massex.subtract(left, right) == Massex.new("11.6505", :gram)
     assert Massex.subtract(left, 10) == Massex.new(30, :gram)
     assert Massex.subtract(left, "10") == Massex.new(30, :gram)
+
+    left = Massex.new(500, :gram)
+    right = Massex.new(1, :pound)
+
+    assert Massex.subtract(left, right) == Massex.new("46.408", :gram)
+    assert Massex.subtract(left, 10) == Massex.new(490, :gram)
+    assert Massex.subtract(left, "10") == Massex.new(490, :gram)
   end
 
   test "Massex.to_decimal/2 returns a Decimal representation of the Massex struct" do
