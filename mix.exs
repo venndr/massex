@@ -1,7 +1,7 @@
 defmodule Massex.MixProject do
   use Mix.Project
 
-  @version "1.1.0"
+  @version "1.1.1"
   @description "A whole-value pattern library for handling masses"
   @homepage_url "https://github.com/venndr/massex"
 
