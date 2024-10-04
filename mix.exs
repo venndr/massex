@@ -21,11 +21,11 @@ defmodule Massex.MixProject do
       end,
       package: %{
         contributors: ["John Maxwell", "Niklas Lindgren", "Bjørn Zeiler Hougaard"],
-        licenses: ["MIT"],
+        licenses: ["ISC"],
         links: %{
           "GitHub" => @homepage_url
         },
-        maintainers: ["John Maxwell", "Niklas Lindgren", "Bjørn Zeiler Hougaard"]
+        maintainers: ["Niklas Lindgren", "Bjørn Zeiler Hougaard"]
       },
       homepage_url: @homepage_url,
       source_url: @homepage_url,
