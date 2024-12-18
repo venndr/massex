@@ -71,7 +71,7 @@ def deps do
 end
 ```
 
-## Licence
+## Licence
 
 ISC License
 
