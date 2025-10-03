@@ -57,8 +57,7 @@ defmodule Massex.MixProject do
       {:jason, "~> 1.2.2", optional: true},
       {:decimal, "~> 2.0"},
       # Development Utils
-      {:credo, "~> 1.1", only: [:dev, :test], runtime: false, optional: true},
-      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false, optional: true},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false, optional: true},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false, optional: true}
     ]
   end
