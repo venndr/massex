@@ -1,14 +1,46 @@
-name: CI
-on: push
+name: Elixir CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  test:
+  build:
+    name: Build and test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        elixir: ["1.18.4", "1.17.3", "1.16.3", "1.15.8"]
+        otp: ["24", "25", "26", "27"]
+        include:
+          - elixir: "1.18.4"
+            otp: "28"
+        exclude:
+          - elixir: "1.18.4"
+            otp: "24"
+          - elixir: "1.17.3"
+            otp: "24"
+          - elixir: "1.16.3"
+            otp: "27"
+          - elixir: "1.15.8"
+            otp: "27"
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-elixir@v1
+      - uses: actions/checkout@v5
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1.20.4
         with:
-          otp-version: "23.0.2"
-          elixir-version: "1.10.3"
-      - run: mix deps.get
-      - run: mix test
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get
+      - name: Run tests
+        run: mix test
