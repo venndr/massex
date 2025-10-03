@@ -11,8 +11,8 @@ defmodule MassexTest do
   end
 
   test "can be Jason encoded" do
-    amount = 10 |> Massex.new(:gram) |> Jason.encode!()
-    assert amount == ~s({"amount":"10","unit":"gram"})
+    amount = 10 |> Massex.new(:gram) |> Jason.encode!() |> Jason.decode!()
+    assert amount == %{"amount" => "10", "unit" => "gram"}
   end
 
   test "Massex.abs/1 returns the absolute amount" do
